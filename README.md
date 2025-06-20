@@ -126,4 +126,8 @@ Update/delete interactively
 Keerthi Sri S
 Department of Artificial Intelligence and Data Science
 Built with ❤️ using Python and Flask
+### 🔗 Check out my LinkedIn post about this project:  
+[**Click here to view the post**](https://www.linkedin.com/posts/keerthi-sri-68a373357_keploy-webdevelopment-python-activity-7341785306125271040-yXL-?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFjdYwoBU2tTHWSHGS5q14HPY8XhyeY6rSE
+https://www.linkedin.com/posts/keerthi-sri-68a373357_keploy-flask-postman-activity-7341820197013532672-EWh1?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFjdYwoBU2tTHWSHGS5q14HPY8XhyeY6rSE)
+
 
