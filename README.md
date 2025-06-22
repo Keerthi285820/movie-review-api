@@ -122,6 +122,32 @@ View existing ones
 
 Update/delete interactively
 
+Testing
+This project includes 3 types of tests located in the tests/ folder:
+
+✅ Unit Tests – Validate the model logic (test_models.py)
+
+✅ Integration Tests – Test DB interaction (test_review_crud.py)
+
+✅ API Tests – Check endpoint functionality (test_endpoints.py)
+
+▶️ How to Run Tests with Coverage
+bash
+Copy
+Edit
+set PYTHONPATH=.
+pytest --cov=app --cov=models tests/
+This command runs all tests and shows code coverage for app.py and models.py.
+
+✅ Test Summary
+Test Type	Status
+Unit Test	✅ Passed
+Integration Test	⚠️ 1 Failed (due to leftover DB data)
+API Test	✅ Passed
+Total Coverage	70% ✅
+
+
+
 📌 Author
 Keerthi Sri S
 Department of Artificial Intelligence and Data Science
