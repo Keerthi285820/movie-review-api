@@ -146,6 +146,24 @@ Integration Test	⚠️ 1 Failed (due to leftover DB data)
 API Test	✅ Passed
 Total Coverage	70% ✅
 
+## 📸 Screenshots
+
+### ✔️ Test Execution Output
+This screenshot shows the result of running the test suite using `pytest`, where 2 tests passed and 1 failed (intentionally for testing purposes):
+
+![Test Output](./pytest-output.png)
+
+### 📊 Coverage Report
+This shows the code coverage achieved using `pytest-cov`. It displays line coverage for each file and the overall project coverage (70%):
+
+![Coverage Report](./coverage-report.png)
+
+### 🗂️ Test Folder Structure
+This screenshot displays the project folder structure in VS Code, including the `tests/` directory with test files:
+
+![Test Folder Structure](./test-folder-structure.png)
+
+
 
 
 📌 Author
