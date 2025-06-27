@@ -1,10 +1,18 @@
 from flask import Flask, request, jsonify
-from flasgger import Swagger
+from flasgger import Swagger, LazyString, LazyJSONEncoder
 from models import db, MovieReview
 
 app = Flask(__name__)
 
-# ✅ Swagger config for /apidocs to work
+# ✅ Database config
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+
+# ✅ Fix for Swagger UI to work with LazyString
+app.json_encoder = LazyJSONEncoder
+
+# ✅ Swagger configuration
 app.config['SWAGGER'] = {
     'title': 'Movie Review API',
     'uiversion': 3
@@ -13,24 +21,22 @@ app.config['SWAGGER'] = {
 swagger_template = {
     "swagger": "2.0",
     "info": {
-        "title": "Movie Review API",
-        "description": "API documentation for managing movie reviews.",
-        "version": "1.0"
+        "title": LazyString(lambda: "Movie Review API"),
+        "description": LazyString(lambda: "API documentation for managing movie reviews."),
+        "version": LazyString(lambda: "1.0")
     },
     "basePath": "/",
-    "schemes": ["http"],
+    "schemes": ["http"]
 }
 swagger = Swagger(app, template=swagger_template)
-
-# ✅ Database config
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db.init_app(app)
 
 @app.before_first_request
 def create_tables():
     db.create_all()
+
+@app.route('/')
+def home():
+    return "Server is running! Go to /apidocs to view the Swagger UI."
 
 @app.route('/reviews', methods=['POST'])
 def add_review():
