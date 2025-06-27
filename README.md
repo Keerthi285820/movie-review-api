@@ -1,41 +1,21 @@
-# 🎬 Movie Review API
+# 🎬 Keploy Movie Review API
 
-A simple RESTful API built with **Flask** and a frontend using **Streamlit**, allowing users to create, view, update, and delete movie reviews. The application uses **SQLite** for local data storage and supports API testing via **Postman**.
-
----
-
-## 🚀 Features
-
-- ✅ Add a new movie review (POST)
-- 📃 View all movie reviews (GET)
-- ✏️ Update a review by ID (PUT)
-- 🗑️ Delete a review by ID (DELETE)
-- 🌐 Streamlit interface for easy interaction
-- 🔌 Postman support for full API testing
-
----
-
-## 🛠️ Tech Stack
-
-| Layer     | Technology         |
-|-----------|--------------------|
-| Backend   | Python, Flask      |
-| Database  | SQLite, SQLAlchemy |
-| Frontend  | Streamlit          |
-| Testing   | Postman            |
+This project demonstrates a simple Flask-based REST API for managing movie reviews. It showcases how to use **Keploy** to automatically record, generate, and replay test cases from real API traffic. It also includes integration with **GitHub Actions CI/CD** pipeline.
 
 ---
 
 ## 📁 Project Structure
 
 movie-review-api/
-├── app.py # Flask backend with API routes
-├── models.py # SQLAlchemy model for MovieReview
-├── database.db # SQLite DB (auto-created)
-├── requirements.txt # Python dependencies
-├── README.md # Project documentation
-└── frontend/
-└── streamlit_app.py # Streamlit user interface
+├── app.py # Flask application
+├── models.py # SQLAlchemy database model
+├── docs/
+│ └── openapi.yaml # OpenAPI schema for Keploy
+├── requirements.txt # Dependencies
+├── .github/
+│ └── workflows/
+│ └── keploy-ci.yml # GitHub Actions CI workflow
+└── README.md # You're here!
 
 yaml
 Copy
@@ -43,135 +23,102 @@ Edit
 
 ---
 
-## 📦 Setup Instructions
+## 📌 Features
 
-### 🔧 1. Clone the Repository
-```bash
-git clone https://github.com/your-username/movie-review-api.git
-cd movie-review-api
-💽 2. Install Requirements
-bash
-Copy
-Edit
-pip install -r requirements.txt
-▶️ 3. Run Flask Backend
-bash
-Copy
-Edit
-python app.py
-Your server will start at:
+✅ REST API built with Flask  
+✅ SQLAlchemy for database  
+✅ Swagger documentation using Flasgger  
+✅ OpenAPI 2.0 spec in YAML format  
+✅ Keploy-based test recording & testing  
+✅ GitHub Actions CI/CD integration  
 
-cpp
-Copy
-Edit
-http://127.0.0.1:5000/
-🧪 API Testing with Postman
-✅ Add Review – POST
-Method: POST
+---
 
-URL: http://127.0.0.1:5000/reviews
+## 🧪 API Endpoints
 
-Body (raw JSON):
+| Method | Endpoint          | Description              |
+|--------|-------------------|--------------------------|
+| GET    | `/reviews`        | Get all movie reviews    |
+| POST   | `/reviews`        | Add a new movie review   |
+| GET    | `/reviews/<id>`   | Get review by ID         |
+| PUT    | `/reviews/<id>`   | Update a review by ID    |
+| DELETE | `/reviews/<id>`   | Delete a review by ID    |
 
-json
-Copy
-Edit
+### 🔸 Sample POST `/reviews` Request:
+
+```json
 {
   "movie_title": "Inception",
   "reviewer": "Keerthi",
-  "rating": 4.7,
-  "review": "Mind-blowing!"
-}
-📃 Get All Reviews – GET
-Method: GET
-
-URL: http://127.0.0.1:5000/reviews
-
-✏️ Update Review – PUT
-Method: PUT
-
-URL: http://127.0.0.1:5000/reviews/1
-
-Body (raw JSON):
-
-json
-Copy
-Edit
-{
-  "movie_title": "Inception (Updated)",
-  "reviewer": "Keerthi Sri",
   "rating": 5,
-  "review": "Updated review content"
+  "review": "Amazing!"
 }
-❌ Delete Review – DELETE
-Method: DELETE
+📖 OpenAPI Schema
+The openapi.yaml file located in the docs/ directory defines your API in Swagger format. It is used by Keploy to auto-generate test cases and simulate API traffic.
 
-URL: http://127.0.0.1:5000/reviews/1
+Use https://editor.swagger.io to visualize or edit it.
 
-🎨 Optional: Streamlit Frontend
-▶️ Run the Streamlit UI
+⚙ Running Keploy Tests
+✅ Record API Traffic
 bash
 Copy
 Edit
-streamlit run frontend/streamlit_app.py
-It connects with the Flask backend to:
+keploy.exe record --proxy
+→ While Keploy proxy is running, make API calls using Postman, browser, or curl.
+→ All traffic is captured automatically into testcases.
 
-Submit new reviews
-
-View existing ones
-
-Update/delete interactively
-
-Testing
-This project includes 3 types of tests located in the tests/ folder:
-
-✅ Unit Tests – Validate the model logic (test_models.py)
-
-✅ Integration Tests – Test DB interaction (test_review_crud.py)
-
-✅ API Tests – Check endpoint functionality (test_endpoints.py)
-
-▶️ How to Run Tests with Coverage
+🔁 Test Replay
 bash
 Copy
 Edit
-set PYTHONPATH=.
-pytest --cov=app --cov=models tests/
-This command runs all tests and shows code coverage for app.py and models.py.
+keploy.exe test --command "python app.py"
+→ Keploy replays previously recorded tests and validates actual vs expected responses.
 
-✅ Test Summary
-Test Type	Status
-Unit Test	✅ Passed
-Integration Test	⚠️ 1 Failed (due to leftover DB data)
-API Test	✅ Passed
-Total Coverage	70% ✅
+🔁 CI/CD Integration
+The .github/workflows/keploy-ci.yml workflow automates:
 
-## 📸 Screenshots
+✅ Python setup
 
-### ✔️ Test Execution Output
-This screenshot shows the result of running the test suite using `pytest`, where 2 tests passed and 1 failed (intentionally for testing purposes):
+✅ Dependency installation
 
-![Test Output](./pytest-output.png)
+✅ Keploy test execution
 
-### 📊 Coverage Report
-This shows the code coverage achieved using `pytest-cov`. It displays line coverage for each file and the overall project coverage (70%):
+🛠 Workflow File: keploy-ci.yml
+yaml
+Copy
+Edit
+name: Keploy CI
 
-![Coverage Report](./coverage-report.png)
+on:
+  push:
+    branches:
+      - main
 
-### 🗂️ Test Folder Structure
-This screenshot displays the project folder structure in VS Code, including the `tests/` directory with test files:
+jobs:
+  keploy-test:
+    runs-on: ubuntu-latest
 
-![Test Folder Structure](./test-folder-structure.png)
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.11'
 
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
 
+      - name: Download Keploy
+        run: |
+          wget https://github.com/keploy/keploy/releases/download/v0.1.6/keploy_linux_amd64.tar.gz
+          tar -xvzf keploy_linux_amd64.tar.gz
+          chmod +x keploy
 
-📌 Author
-Keerthi Sri S
-Department of Artificial Intelligence and Data Science
-Built with ❤️ using Python and Flask
-### 🔗 Check out my LinkedIn post about this project:  
-[**Click here to view the post**](https://www.linkedin.com/posts/keerthi-sri-68a373357_keploy-webdevelopment-python-activity-7341785306125271040-yXL-?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFjdYwoBU2tTHWSHGS5q14HPY8XhyeY6rSE
-https://www.linkedin.com/posts/keerthi-sri-68a373357_keploy-flask-postman-activity-7341820197013532672-EWh1?utm_source=share&utm_medium=member_desktop&rcm=ACoAAFjdYwoBU2tTHWSHGS5q14HPY8XhyeY6rSE)
-
+      - name: Run Keploy Tests
+        run: ./keploy test --command "python app.py"
+✍ Author
+👩‍💻 Keerthi Sri
+Passionate about developing reliable APIs and exploring API testing automation using Keploy.
 
