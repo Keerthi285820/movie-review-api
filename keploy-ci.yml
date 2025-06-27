@@ -1,0 +1,30 @@
+name: Keploy API Test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Keploy CLI
+        run: |
+          curl -sSfL https://get.keploy.io/install.sh | sh
+          echo "$HOME/.keploy/bin" >> $GITHUB_PATH
+
+      - name: Run Keploy API Tests
+        run: |
+          keploy test --command "python app.py"
