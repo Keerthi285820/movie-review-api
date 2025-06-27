@@ -1,12 +1,20 @@
 from flask import Flask, request, jsonify
-from models import db, MovieReview
 from flasgger import Swagger
+from models import db, MovieReview
 
 app = Flask(__name__)
+
+# ✅ Swagger/OpenAPI config to enable /apidocs
+app.config['SWAGGER'] = {
+    'title': 'Movie Review API',
+    'uiversion': 3
+}
+swagger = Swagger(app)
+
+# ✅ Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-swagger = Swagger(app)
 db.init_app(app)
 
 @app.before_first_request
