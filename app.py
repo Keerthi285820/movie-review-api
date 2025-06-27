@@ -4,12 +4,23 @@ from models import db, MovieReview
 
 app = Flask(__name__)
 
-# ✅ Swagger/OpenAPI config to enable /apidocs
+# ✅ Swagger config for /apidocs to work
 app.config['SWAGGER'] = {
     'title': 'Movie Review API',
     'uiversion': 3
 }
-swagger = Swagger(app)
+
+swagger_template = {
+    "swagger": "2.0",
+    "info": {
+        "title": "Movie Review API",
+        "description": "API documentation for managing movie reviews.",
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "schemes": ["http"],
+}
+swagger = Swagger(app, template=swagger_template)
 
 # ✅ Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
