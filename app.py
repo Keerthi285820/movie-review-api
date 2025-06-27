@@ -183,5 +183,10 @@ def delete_review(id):
     db.session.commit()
     return jsonify({"message": "Review deleted!"})
 
+@app.route('/')
+def home():
+    return "🎬 Movie Review API is running!"
+
 if __name__ == '__main__':
     app.run(debug=True)
+
