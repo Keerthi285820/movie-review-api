@@ -4,7 +4,7 @@ from models import db, MovieReview
 
 app = Flask(__name__)
 
-# ✅ Swagger config for /apidocs to work
+# ✅ Swagger config
 app.config['SWAGGER'] = {
     'title': 'Movie Review API',
     'uiversion': 3
@@ -31,37 +31,12 @@ db.init_app(app)
 def create_tables():
     db.create_all()
 
+@app.route('/')
+def home():
+    return "🎬 Movie Review API is running!"
+
 @app.route('/reviews', methods=['POST'])
 def add_review():
-    """
-    Add a new movie review
-    ---
-    tags:
-      - Reviews
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - movie_title
-              - reviewer
-              - rating
-              - review
-            properties:
-              movie_title:
-                type: string
-              reviewer:
-                type: string
-              rating:
-                type: number
-              review:
-                type: string
-    responses:
-      201:
-        description: Review added successfully
-    """
     data = request.get_json()
     new_review = MovieReview(**data)
     db.session.add(new_review)
@@ -70,15 +45,6 @@ def add_review():
 
 @app.route('/reviews', methods=['GET'])
 def get_reviews():
-    """
-    Get all movie reviews
-    ---
-    tags:
-      - Reviews
-    responses:
-      200:
-        description: A list of movie reviews
-    """
     reviews = MovieReview.query.all()
     return jsonify([{
         "id": r.id,
@@ -90,23 +56,6 @@ def get_reviews():
 
 @app.route('/reviews/<int:id>', methods=['GET'])
 def get_review(id):
-    """
-    Get a review by ID
-    ---
-    tags:
-      - Reviews
-    parameters:
-      - name: id
-        in: path
-        type: integer
-        required: true
-        description: Review ID
-    responses:
-      200:
-        description: A single movie review
-      404:
-        description: Review not found
-    """
     r = MovieReview.query.get_or_404(id)
     return jsonify({
         "id": r.id,
@@ -118,38 +67,6 @@ def get_review(id):
 
 @app.route('/reviews/<int:id>', methods=['PUT'])
 def update_review(id):
-    """
-    Update a review by ID
-    ---
-    tags:
-      - Reviews
-    parameters:
-      - name: id
-        in: path
-        type: integer
-        required: true
-        description: Review ID
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              movie_title:
-                type: string
-              reviewer:
-                type: string
-              rating:
-                type: number
-              review:
-                type: string
-    responses:
-      200:
-        description: Review updated successfully
-      404:
-        description: Review not found
-    """
     r = MovieReview.query.get_or_404(id)
     data = request.get_json()
     r.movie_title = data.get("movie_title", r.movie_title)
@@ -161,32 +78,10 @@ def update_review(id):
 
 @app.route('/reviews/<int:id>', methods=['DELETE'])
 def delete_review(id):
-    """
-    Delete a review by ID
-    ---
-    tags:
-      - Reviews
-    parameters:
-      - name: id
-        in: path
-        type: integer
-        required: true
-        description: Review ID
-    responses:
-      200:
-        description: Review deleted successfully
-      404:
-        description: Review not found
-    """
     r = MovieReview.query.get_or_404(id)
     db.session.delete(r)
     db.session.commit()
     return jsonify({"message": "Review deleted!"})
 
-@app.route('/')
-def home():
-    return "🎬 Movie Review API is running!"
-
 if __name__ == '__main__':
     app.run(debug=True)
-
